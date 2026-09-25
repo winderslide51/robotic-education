@@ -8,14 +8,20 @@ const props = defineProps({
   ateliers: { type: Array, default: () => ['Robot cartésien', 'Robot SCARA', 'Robot 6 axes'] },
 })
 
-const COLORS = ['#EA580C', '#2563EB', '#16A34A', '#9333EA', '#0F172A']
+const COLORS = [
+  { hex: '#EA580C', name: 'Orange' },
+  { hex: '#2563EB', name: 'Bleu' },
+  { hex: '#16A34A', name: 'Vert' },
+  { hex: '#9333EA', name: 'Violet' },
+  { hex: '#0F172A', name: 'Noir' },
+]
 const BASE = import.meta.env.BASE_URL || '/'
 
 const robot = ref(null)
 const video = ref(null)
 const fileInput = ref(null)
 const name = ref('')
-const color = ref(COLORS[0])
+const color = ref(COLORS[0].hex)
 
 // La photo ne vit que dans la mémoire de la page : jamais envoyée, jamais enregistrée.
 const photo = ref('') // image carrée (data URL), ou '' sans photo
@@ -24,8 +30,12 @@ const cameraError = ref('')
 const videoReady = ref(false)
 const diplomaUrl = ref('')
 const composing = ref(false)
+const composeError = ref('')
 let stream = null
 let alive = true
+let camReq = 0 // jeton de la demande de caméra en cours : une réponse périmée est aussitôt coupée
+let camPending = false
+let lastCanvas = null
 
 // --- Caméra frontale ---
 function stopCamera() {
@@ -39,34 +49,49 @@ function openPicker() {
   fileInput.value?.click()
 }
 
+const stopTracks = (s) => s?.getTracks().forEach((t) => t.stop())
+
+// Invalide la demande de caméra en cours (sa réponse sera coupée dès son arrivée)
+function dropCameraRequest() {
+  camReq += 1
+  camPending = false
+}
+
 async function startCamera() {
+  if (camPending) return // double appui : une seule demande à la fois
   cameraError.value = ''
   if (!navigator.mediaDevices?.getUserMedia) {
     cameraError.value = 'La caméra n’est pas disponible : choisis plutôt une photo.'
-    openPicker()
     return
   }
+  const my = ++camReq
+  camPending = true
+  let s
   try {
-    const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 720 }, height: { ideal: 720 } }, audio: false })
-    if (!alive) return s.getTracks().forEach((t) => t.stop())
-    stream = s
+    s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 720 }, height: { ideal: 720 } }, audio: false })
   } catch (e) {
+    if (my !== camReq) return
+    camPending = false
     console.warn('Caméra indisponible :', e?.name || e)
-    cameraError.value = 'La caméra n’est pas accessible : choisis plutôt une photo.'
-    openPicker()
+    if (alive && photoStep.value === 'ask') cameraError.value = 'La caméra n’est pas accessible : choisis plutôt une photo.'
     return
   }
+  if (my === camReq) camPending = false
+  if (!alive || my !== camReq || photoStep.value !== 'ask') return stopTracks(s)
+  stopCamera()
+  stream = s
   photoStep.value = 'camera'
   await nextTick()
   const v = video.value
-  if (!v || !stream) return
-  v.srcObject = stream
+  if (!v || stream !== s) return
+  v.srcObject = s
   v.onloadedmetadata = () => (videoReady.value = true)
   await v.play().catch(() => {})
   if (v.videoWidth) videoReady.value = true
 }
 
 function cancelCamera() {
+  dropCameraRequest()
   stopCamera()
   photoStep.value = photo.value || diplomaUrl.value ? 'done' : 'ask'
 }
@@ -113,6 +138,7 @@ function onFile(e) {
 }
 
 function withoutPhoto() {
+  dropCameraRequest()
   stopCamera()
   photo.value = ''
   cameraError.value = ''
@@ -120,7 +146,15 @@ function withoutPhoto() {
 }
 
 function retakePhoto() {
+  cameraError.value = ''
   photoStep.value = 'ask'
+}
+
+// Annule « Changer / Ajouter ma photo » en gardant la photo actuelle
+function keepPhoto() {
+  dropCameraRequest()
+  cameraError.value = ''
+  photoStep.value = 'done'
 }
 
 // --- Composition du diplôme (canvas 2D, entièrement sur l'appareil) ---
@@ -132,23 +166,53 @@ const TEXT = '#475569'
 const MUTED = '#64748B'
 const ACCENT = '#EA580C'
 
-function loadImage(src) {
+function loadImage(src, w, h) {
   return new Promise((resolve) => {
     if (!src) return resolve(null)
-    const img = new Image()
+    const img = w ? new Image(w, h) : new Image()
     img.onload = () => resolve(img)
     img.onerror = () => resolve(null)
     img.src = src
   })
 }
 
+// Logo JVMA : proportions lues dans son viewBox. Un SVG sans width/height peut ne rien dessiner
+// (Firefox) : on le recharge alors depuis une copie en mémoire à laquelle on ajoute une taille.
+const LOGO_H = 96
+async function fetchLogo() {
+  try {
+    const url = `${BASE}brand/logo-jvma.svg`
+    const text = await (await fetch(url)).text()
+    const vb = text.match(/viewBox\s*=\s*["']([^"']+)["']/)?.[1].trim().split(/[\s,]+/).map(Number)
+    const ratio = vb?.length === 4 && vb[2] > 0 && vb[3] > 0 ? vb[2] / vb[3] : 2
+    const w = Math.round(LOGO_H * ratio)
+    let img = await loadImage(url, w, LOGO_H)
+    if (!img?.naturalWidth && !/<svg\b[^>]*\swidth\s*=/.test(text)) {
+      const sized = text.replace(/<svg\b/, `<svg width="${w * 4}" height="${LOGO_H * 4}"`)
+      const blobUrl = URL.createObjectURL(new Blob([sized], { type: 'image/svg+xml' }))
+      img = await loadImage(blobUrl, w, LOGO_H)
+      URL.revokeObjectURL(blobUrl)
+    }
+    return img ? { img, w, h: LOGO_H } : null
+  } catch {
+    return null
+  }
+}
 let logoPromise = null
-const loadLogo = () => (logoPromise ??= loadImage(`${BASE}brand/logo-jvma.svg`))
+const loadLogo = () => (logoPromise ??= fetchLogo())
 
-function fitText(g, text, max, size, weight = 700) {
+// Réduit la police jusqu'au minimum, puis tronque avec « … » ; renvoie le texte à dessiner
+function fitText(g, text, max, size, weight = 700, min = 14) {
   let s = size
-  do g.font = `${weight} ${s}px ${FONT}`
-  while (g.measureText(text).width > max && (s -= 2) > 20)
+  for (;;) {
+    g.font = `${weight} ${s}px ${FONT}`
+    if (g.measureText(text).width <= max || s <= min) break
+    s = Math.max(min, s - 2)
+  }
+  if (g.measureText(text).width <= max) return text
+  let t = text
+  while (t.length > 1 && g.measureText(`${t}…`).width > max) t = t.slice(0, -1)
+  return `${t.trimEnd()}…`
 }
 
 // Cadre serré autour des pixels non transparents (la capture 3D a beaucoup de marge)
@@ -195,9 +259,22 @@ let token = 0
 async function compose() {
   const my = ++token
   composing.value = true
+  composeError.value = ''
+  try {
+    await draw(my)
+  } catch (e) {
+    console.warn('Diplôme impossible à préparer :', e)
+    if (my === token) composeError.value = 'Le diplôme n’a pas pu être préparé. Réessaie.'
+  } finally {
+    if (my === token) composing.value = false
+  }
+}
+
+async function draw(my) {
   await robot.value?.whenReady()
   const robotUrl = robot.value?.toDataURL() || ''
   const [logo, robotImg, photoImg] = await Promise.all([loadLogo(), loadImage(robotUrl), loadImage(photo.value)])
+  await document.fonts?.ready
   if (my !== token || !alive) return
 
   const c = document.createElement('canvas')
@@ -215,8 +292,7 @@ async function compose() {
   // En-tête : logo JVMA (proportions d'origine) et Robolution
   if (logo) {
     try {
-      const lh = 96
-      g.drawImage(logo, 150, 80, lh * (114.1 / 53.4), lh)
+      g.drawImage(logo.img, 150, 80, logo.w, logo.h)
     } catch { /* logo SVG non dessinable sur ce navigateur */ }
   }
   g.textAlign = 'right'
@@ -264,8 +340,7 @@ async function compose() {
   g.fillText('décerné à', W / 2, 976)
   g.fillStyle = INK
   const who = name.value.trim() || 'Recrue Robolution'
-  fitText(g, who, W - 240, 76)
-  g.fillText(who, W / 2, 1056)
+  g.fillText(fitText(g, who, W - 240, 76), W / 2, 1056)
 
   // Les 3 ateliers validés
   const bw = (W - 200 - 40) / 3
@@ -281,9 +356,9 @@ async function compose() {
     g.font = `700 22px ${FONT}`
     g.fillText('✓', x + 30, 1144)
     g.fillStyle = INK
-    fitText(g, a, bw - 72, 26)
+    const label = fitText(g, a, bw - 72, 26)
     g.textAlign = 'left'
-    g.fillText(a, x + 56, 1146)
+    g.fillText(label, x + 56, 1146)
     g.textAlign = 'center'
   })
 
@@ -294,32 +369,48 @@ async function compose() {
   g.fillStyle = MUTED
   const parts = props.pieces.map((p) => p.name).join(' · ')
   if (parts) {
-    fitText(g, `Pièces gagnées : ${parts}`, W - 220, 24, 400)
-    g.fillText(`Pièces gagnées : ${parts}`, W / 2, 1310)
+    g.fillText(fitText(g, `Pièces gagnées : ${parts}`, W - 220, 24, 400), W / 2, 1310)
   }
   g.font = `400 24px ${FONT}`
   const date = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
   g.fillText(`Le ${date}`, W / 2, 1352)
 
   diplomaUrl.value = c.toDataURL('image/png')
-  composing.value = false
+  lastCanvas = c
 }
 
-function download() {
-  if (!diplomaUrl.value) return
-  const a = document.createElement('a')
-  a.href = diplomaUrl.value
+// PNG produit avec toBlob ; partage natif si possible (iOS Safari ignore souvent « download »),
+// sinon lien de téléchargement vers une URL blob, révoquée ensuite
+async function download() {
+  if (!lastCanvas || composing.value) return
+  const blob = await new Promise((r) => lastCanvas.toBlob(r, 'image/png'))
+  if (!blob) return
   const slug = (name.value.trim() || 'robolution').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase()
-  a.download = `diplome-${slug || 'robolution'}.png`
+  const filename = `diplome-${slug || 'robolution'}.png`
+  const file = new File([blob], filename, { type: 'image/png' })
+  if (navigator.canShare?.({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: 'Mon diplôme Robolution' })
+      return
+    } catch (e) {
+      if (e?.name === 'AbortError') return
+    }
+  }
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
   document.body.appendChild(a)
   a.click()
   a.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 2000)
 }
 
 // Le diplôme se recompose dès qu'on change la photo, le nom ou la couleur
 let timer = 0
 watch([photoStep, photo, name, color], () => {
   if (photoStep.value !== 'done') return
+  composing.value = true
   clearTimeout(timer)
   timer = setTimeout(compose, 250)
 })
@@ -327,6 +418,7 @@ watch([photoStep, photo, name, color], () => {
 onUnmounted(() => {
   alive = false
   clearTimeout(timer)
+  dropCameraRequest()
   stopCamera()
 })
 </script>
@@ -341,7 +433,7 @@ onUnmounted(() => {
     <div class="field">
       <span class="label">Sa couleur</span>
       <div class="colors">
-        <button v-for="c in COLORS" :key="c" :style="{ background: c }" :class="{ on: c === color }" :aria-label="`Couleur ${c}`" :aria-pressed="c === color" @click="color = c" />
+        <button v-for="c in COLORS" :key="c.hex" :style="{ background: c.hex }" :class="{ on: c.hex === color }" :aria-label="c.name" :title="c.name" :aria-pressed="c.hex === color" @click="color = c.hex" />
       </div>
     </div>
 
@@ -361,6 +453,7 @@ onUnmounted(() => {
         </div>
         <p v-if="cameraError" class="error" role="status">{{ cameraError }}</p>
         <button v-if="cameraError" class="secondary" @click="openPicker">Choisir une photo</button>
+        <button v-if="diplomaUrl" class="secondary" @click="keepPhoto">Annuler</button>
       </template>
 
       <template v-else-if="photoStep === 'camera'">
@@ -380,13 +473,15 @@ onUnmounted(() => {
         </div>
       </template>
 
-      <input ref="fileInput" class="file" type="file" accept="image/*" capture="user" tabindex="-1" aria-hidden="true" @change="onFile" />
+      <input ref="fileInput" class="file" type="file" accept="image/*" tabindex="-1" aria-hidden="true" @change="onFile" />
     </section>
 
     <section v-if="photoStep === 'done'" class="diploma-box">
-      <p v-if="!diplomaUrl" class="note">Préparation du diplôme…</p>
+      <p v-if="composeError" class="error" role="alert">{{ composeError }}</p>
+      <button v-if="composeError" class="secondary" @click="compose">Réessayer</button>
+      <p v-else-if="!diplomaUrl" class="note">Préparation du diplôme…</p>
       <img v-else class="diploma" :class="{ busy: composing }" :src="diplomaUrl" alt="Mon diplôme de roboticien·ne" />
-      <button class="primary download" :disabled="!diplomaUrl" @click="download">📥 Télécharger mon diplôme</button>
+      <button class="primary download" :disabled="!diplomaUrl || composing" @click="download">📥 Télécharger mon diplôme</button>
     </section>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 // three est chargé à la demande, comme dans les jeux
 let THREE
@@ -373,17 +373,33 @@ function onContextLost(e) {
   fail()
 }
 
-// Capture de l'image du robot (pour le diplôme), vue de trois quarts, toutes pièces en place
+// Capture de l'image du robot (pour le diplôme), vue de trois quarts, toutes pièces en place.
+// Rendu temporaire à taille fixe (net sur le diplôme), lu dans la même tâche que le rendu.
+const CAPTURE = { w: 900, h: 1000 }
 function toDataURL() {
   if (failed.value || !renderer) return fallbackUrl.value || drawFallback()
   finishAnims()
   const angle = root.rotation.y
+  const ratio = renderer.getPixelRatio()
   root.rotation.y = 0.7
+  renderer.setPixelRatio(1)
+  renderer.setSize(CAPTURE.w, CAPTURE.h, false)
+  camera.aspect = CAPTURE.w / CAPTURE.h
+  camera.updateProjectionMatrix()
   renderer.render(scene, camera)
   const url = renderer.domElement.toDataURL('image/png')
   root.rotation.y = angle
+  renderer.setPixelRatio(ratio)
+  resize()
+  renderer.render(scene, camera)
   return url
 }
+
+// Description accessible : les pièces réellement montées
+const label = computed(() => {
+  const names = props.pieces.map((p) => p?.name).filter(Boolean).map((n) => n.charAt(0).toLowerCase() + n.slice(1))
+  return names.length ? `Ton robot : ${names.join(', ')}` : 'Ton robot, encore sans pièce'
+})
 defineExpose({ toDataURL, whenReady: () => ready })
 
 watch(() => props.color, (c) => {
@@ -401,7 +417,7 @@ onMounted(async () => {
   try {
     THREE = await import('three')
     if (!alive) return
-    renderer = new THREE.WebGLRenderer({ canvas: canvas.value, antialias: true, alpha: true, preserveDrawingBuffer: true })
+    renderer = new THREE.WebGLRenderer({ canvas: canvas.value, antialias: true, alpha: true })
     renderer.setClearColor(0x000000, 0)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
     buildScene()
@@ -434,6 +450,7 @@ onUnmounted(() => {
     o.geometry?.dispose()
     for (const m of [].concat(o.material || [])) m.dispose()
   })
+  renderer?.forceContextLoss()
   renderer?.dispose()
   renderer = null
 })
@@ -441,8 +458,8 @@ onUnmounted(() => {
 
 <template>
   <div ref="wrap" class="robot3d" :data-slots="[...slotsOf(pieces)].join(',')" :data-state="failed ? 'fallback' : loading ? 'loading' : 'ready'">
-    <canvas v-show="!failed" ref="canvas" role="img" aria-label="Ton robot en construction" />
-    <img v-if="failed && fallbackUrl" :src="fallbackUrl" alt="Ton robot en construction" />
+    <canvas v-show="!failed" ref="canvas" role="img" :aria-label="label" />
+    <img v-if="failed && fallbackUrl" :src="fallbackUrl" :alt="label" />
     <p v-if="loading" class="loading">Chargement du robot…</p>
   </div>
 </template>
