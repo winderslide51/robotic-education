@@ -2,7 +2,7 @@
 title: 'v1.5 — Vraies photos des robots et des pièces'
 type: 'feature'
 created: '2026-09-25'
-status: 'in-review'
+status: 'done'
 baseline_commit: 'd1ed4598f05770e22b7139bfb32ca45b8c8cc769'
 route: 'dispatch'
 review_loop_iteration: 0
