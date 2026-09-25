@@ -2,7 +2,7 @@
 title: 'v1.6 — Le robot de l’utilisateur, construit au fil du parcours, avec sa photo'
 type: 'feature'
 created: '2026-09-25'
-status: 'in-review'
+status: 'done'
 baseline_commit: 'd1ed4598f05770e22b7139bfb32ca45b8c8cc769'
 route: 'dispatch'
 review_loop_iteration: 0
