@@ -2,7 +2,7 @@
 title: 'v1.4 — Design HackRobotique (charte Figma)'
 type: 'feature'
 created: '2026-09-25'
-status: 'in-review'
+status: 'done'
 baseline_commit: 'e4e51769c156de34a9fc91adbb39d57d5c019714'
 route: 'dispatch'
 review_loop_iteration: 0
