@@ -1,4 +1,4 @@
-"""API du parcours RoboFête : sert le contenu pédagogique (blocs, quiz, missions).
+"""API du parcours Robolution : sert le contenu pédagogique (intro, blocs, quiz, missions).
 
 Déployée en AWS Lambda (Function URL) par Amplify Gen 2, voir amplify/backend.ts.
 Aucune donnée personnelle n'est collectée.

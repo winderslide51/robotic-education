@@ -1,29 +1,50 @@
 {
+  "intro": {
+    "title": "C'est quoi un axe ?",
+    "text": "Un axe, c'est une façon de bouger pour le robot : soit avancer en ligne droite dans une direction, soit tourner autour d'une articulation, comme ton coude. Chaque axe a son propre moteur. Plus un robot a d'axes, plus il peut faire de gestes différents.",
+    "families": [
+      {
+        "id": "cartesien",
+        "name": "Cartésien",
+        "text": "3 axes en ligne droite : gauche-droite, avant-arrière, haut-bas. Simple et précis."
+      },
+      {
+        "id": "scara",
+        "name": "SCARA",
+        "text": "Un bras qui tourne à plat, comme ton bras posé sur une table. Très rapide."
+      },
+      {
+        "id": "6axes",
+        "name": "6 axes",
+        "text": "Un bras complet : épaule, coude et poignet. Il peut orienter son outil dans tous les sens."
+      }
+    ]
+  },
   "blocks": [
     {
       "id": "cartesien",
       "robot": "Robot cartésien",
       "game": "claw",
       "color": "#e8467c",
-      "question": "C'est quoi un axe ?",
-      "answer": "Un axe, c'est une direction dans laquelle le robot peut bouger. Le robot cartésien en a 3 : gauche-droite (X), avant-arrière (Y), haut-bas (Z). Exactement comme la pince de fête foraine !",
+      "question": "Comment un robot peut-il atteindre n'importe quel point d'une boîte ?",
+      "answer": "Le robot cartésien se déplace le long de ses 3 axes, en ligne droite : gauche-droite (X), avant-arrière (Y) et haut-bas (Z). En combinant les trois, il peut atteindre n'importe quel point de sa zone de travail, comme une machine à pince.",
       "video": {
-        "youtubeId": "p4TjzeKhK3A",
+        "youtubeId": "455M0sEfTRE",
         "start": 10,
-        "end": 45,
-        "title": "Robot portique de palettisation multi-lignes",
-        "source": "Chaîne officielle d'un intégrateur industriel (Sage Automation)",
-        "fallbackId": "gy9J-W8h2Qw"
+        "end": 40,
+        "title": "Un palettiseur cartésien empile des colis",
+        "source": "Chaîne officielle d'ECI Concept, intégrateur français",
+        "fallbackId": "DkysL-me4KU"
       },
       "piece": {
-        "name": "Rail linéaire",
-        "icon": "🛤️",
+        "name": "Axe linéaire",
+        "icon": "📏",
         "slot": "legs",
-        "desc": "Un rail sur lequel glisse un chariot motorisé. C'est lui qui fait avancer le robot en ligne droite sur un axe."
+        "desc": "Un moteur fait avancer un chariot en ligne droite le long d'un guide. Le robot cartésien en a trois, un par direction."
       },
       "quiz": [
         {
-          "q": "Combien d'axes a la pince de fête foraine ?",
+          "q": "Combien d'axes a une machine à pince ?",
           "choices": [
             "1",
             "2",
@@ -41,10 +62,10 @@
             "en marchant"
           ],
           "answer": 0,
-          "explain": "Il glisse sur des rails, uniquement en ligne droite."
+          "explain": "Il se déplace le long de ses 3 axes, uniquement en ligne droite."
         },
         {
-          "q": "Où trouve-t-on des robots cartésiens ?",
+          "q": "Par exemple, où trouve-t-on des robots cartésiens ?",
           "choices": [
             "Dans les entrepôts pour déplacer des colis",
             "Dans l'espace uniquement",
@@ -60,21 +81,21 @@
       "robot": "Robot SCARA",
       "game": "sort",
       "color": "#f2b705",
-      "question": "Pourquoi un robot aussi rapide ?",
-      "answer": "Le SCARA est un bras qui tourne à plat, comme ton bras posé sur une table. Il ne soulève presque rien, mais il est ultra rapide : parfait pour trier des bonbons, des chocolats ou des composants électroniques.",
+      "question": "Pourquoi certains robots vont-ils si vite ?",
+      "answer": "Le robot SCARA porte des objets légers, mais il enchaîne les gestes à toute vitesse : il peut prendre et poser plus de 100 objets par minute. Parfait pour trier des fruits, des chocolats ou des composants électroniques.",
       "video": {
-        "youtubeId": "-m1oKuFkSTE",
-        "start": 5,
-        "end": 35,
-        "title": "SCARA FANUC SR-3iA : prise et dépose à grande vitesse",
-        "source": "Chaîne officielle d'un fabricant (FANUC)",
-        "fallbackId": "vp1N3desi_g"
+        "youtubeId": "OFImCYTZzfU",
+        "start": 40,
+        "end": 70,
+        "title": "Des robots SCARA Stäubli trient des pêches",
+        "source": "Chaîne officielle de Stäubli, fabricant français de robots (Faverges)",
+        "fallbackId": "-ysQYp1YsFY"
       },
       "piece": {
         "name": "Ventouse",
         "icon": "🪠",
         "slot": "hand",
-        "desc": "Un préhenseur qui aspire l'air pour coller à l'objet. Pas besoin de le serrer : idéal pour les objets fragiles."
+        "desc": "Elle aspire l'air pour se coller à l'objet et le soulever. Pas besoin de le serrer : c'est idéal pour les objets fragiles ou plats."
       },
       "quiz": [
         {
@@ -114,21 +135,21 @@
       "robot": "Robot 6 axes",
       "game": "pour",
       "color": "#2e86de",
-      "question": "Pourquoi 6 axes ?",
-      "answer": "Avec 6 axes, le robot peut placer son outil n'importe où ET l'orienter dans n'importe quel sens. Comme ton bras : une épaule, un coude, un poignet. C'est pour ça qu'il peut verser, souder ou peindre.",
+      "question": "Pourquoi un robot aurait-il besoin de 6 axes ?",
+      "answer": "Avec 6 axes, le robot peut amener son outil à n'importe quel endroit ET l'orienter dans n'importe quel sens. Comme ton bras : une épaule, un coude, un poignet. C'est pour ça qu'il peut verser, souder ou peindre.",
       "video": {
-        "youtubeId": "JR1OkA3fQQQ",
-        "start": 10,
-        "end": 45,
-        "title": "Robot ABB 6 axes qui verse du métal en fonderie",
-        "source": "Chaîne officielle d'un intégrateur industriel (Lincoln Electric Automation)",
-        "fallbackId": "X4QVRYAphYQ"
+        "youtubeId": "YXSK4Cnm_ps",
+        "start": 5,
+        "end": 40,
+        "title": "Un robot 6 axes barman qui sert à boire",
+        "source": "Chaîne officielle de Guignard Robotisation, intégrateur français",
+        "fallbackId": "2z0vl0k8vZ0"
       },
       "piece": {
-        "name": "Poignet motorisé",
+        "name": "Poignet 3 axes (axes 4-5-6)",
         "icon": "🦾",
         "slot": "arm",
-        "desc": "Trois petits moteurs qui font tourner l'outil dans tous les sens. C'est ce qui permet d'incliner, de visser ou de verser."
+        "desc": "Les trois derniers axes du robot, au bout du bras. Ils font tourner et incliner l'outil : c'est grâce à eux qu'il peut verser, visser ou peindre."
       },
       "quiz": [
         {

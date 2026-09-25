@@ -1,7 +1,8 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { shuffle } from '../shuffle.js'
 
-const props = defineProps({ questions: Array, seconds: { type: Number, default: 15 } })
+const props = defineProps({ questions: Array, seconds: { type: Number, default: 20 } })
 const emit = defineEmits(['done'])
 
 const index = ref(0)
@@ -11,7 +12,15 @@ const points = ref(0)
 const missed = []
 let timer = 0
 
-const current = computed(() => props.questions[index.value])
+// Les propositions sont mélangées pour que la bonne réponse ne soit pas toujours à la même place,
+// sauf si ce sont des nombres : on les laisse dans l'ordre croissant prévu par le contenu.
+function shuffled(q) {
+  if (q.choices.every((c) => /^\s*\d+([.,]\d+)?\s*$/.test(String(c)))) return q
+  const order = shuffle(q.choices.map((_, i) => i))
+  return { ...q, choices: order.map((i) => q.choices[i]), answer: order.indexOf(q.answer) }
+}
+const shuffledQuestions = props.questions.map(shuffled)
+const current = computed(() => shuffledQuestions[index.value])
 
 function tick() {
   if (picked.value !== null) return
@@ -23,7 +32,7 @@ function choose(i) {
   if (picked.value !== null) return
   picked.value = i
   if (i === current.value.answer) points.value += 100 + left.value * 10
-  else missed.push(current.value)
+  else missed.push(props.questions[index.value])
 }
 
 function next() {
@@ -44,9 +53,9 @@ onUnmounted(() => clearInterval(timer))
   <div class="quiz">
     <div class="top">
       <span>Question {{ index + 1 }} / {{ questions.length }}</span>
-      <span class="timer" :class="{ hurry: left <= 5 }">⏱ {{ left }} s</span>
       <span>⭐ {{ points }}</span>
     </div>
+    <div class="timer" :class="{ hurry: left <= 5, over: picked !== null }">⏱ {{ left }} s</div>
     <h2>{{ current.q }}</h2>
     <div class="choices">
       <button
@@ -57,8 +66,12 @@ onUnmounted(() => clearInterval(timer))
         @click="choose(i)"
       >{{ c }}</button>
     </div>
+    <div v-if="picked !== null && picked !== current.answer" class="banner" role="status" aria-live="polite">
+      <b>{{ picked === -1 ? 'Temps écoulé !' : 'Pas tout à fait…' }}</b>
+      <span>{{ picked === -1 ? 'La bonne réponse était' : 'La bonne réponse' }} : <span class="answer">{{ current.choices[current.answer] }}</span></span>
+    </div>
     <div v-if="picked !== null" class="feedback">
-      <p><b>{{ picked === current.answer ? 'Bien joué !' : picked === -1 ? 'Temps écoulé !' : 'Pas tout à fait…' }}</b> {{ current.explain }}</p>
+      <p><b v-if="picked === current.answer">Bien joué ! </b>{{ current.explain }}</p>
       <button class="next" @click="next">Continuer</button>
     </div>
   </div>
@@ -66,14 +79,19 @@ onUnmounted(() => clearInterval(timer))
 
 <style scoped>
 .top { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; }
+.timer { text-align: center; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-top: 4px; font-variant-numeric: tabular-nums; }
 .timer.hurry { color: #c0392b; }
+.timer.over { opacity: 0.4; }
+.banner { margin-top: 12px; background: #394060; color: #fff; border-radius: 12px; padding: 12px; font-size: 1.1rem; font-weight: 600; text-align: center; display: flex; flex-direction: column; gap: 4px; }
+.banner .answer { display: inline-block; background: #1e8449; border-radius: 999px; padding: 2px 12px; font-weight: 800; }
 h2 { font-size: 1.2rem; text-align: center; }
 .choices { display: grid; gap: 8px; }
 .choices button { min-height: 52px; border: none; border-radius: 12px; color: #fff; font-size: 1rem; font-weight: 600; padding: 8px; }
 .c0 { background: #e21b3c; } .c1 { background: #1368ce; } .c2 { background: #d89e00; } .c3 { background: #26890c; }
-.choices button:disabled { opacity: 0.45; }
-.choices button.good { opacity: 1; outline: 4px solid #1e8449; }
-.choices button.bad { opacity: 1; outline: 4px solid #333; }
+.choices button:disabled { opacity: 0.3; }
+.choices button.good { opacity: 1; background: #1e8449; outline: 4px solid #145a32; }
+.choices button.good::before { content: '✔ '; }
+.choices button.bad { opacity: 0.6; outline: 3px solid #333; }
 .feedback { margin-top: 12px; background: #fff; border-radius: 12px; padding: 12px; }
 .next { width: 100%; }
 </style>

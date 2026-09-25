@@ -31,13 +31,17 @@ button { font: inherit; cursor: pointer; }
 .card > button:active { transform: translateY(3px); box-shadow: 0 1px 0 #22263a; }
 .card > button.skip { background: transparent; color: #8a8fa0; box-shadow: none; font-size: 0.85rem; font-weight: 400; padding: 4px; }
 
-.stands { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-.stands span { color: #fff; font-weight: 700; padding: 6px 12px; border-radius: 999px; }
+.ateliers { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.ateliers span { color: #fff; font-weight: 700; padding: 6px 12px; border-radius: 999px; }
 
-.stand { margin: 0; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.atelier { margin: 0; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; }
 .naive { background: #fff; border-radius: 16px; padding: 16px; font-size: 1.2rem; border-left: 6px solid #f2b705; }
 .naive.small { font-size: 1rem; }
 .teaser { margin: 0; color: #5b5f73; }
+
+.families { display: flex; flex-direction: column; gap: 8px; }
+.family { background: #fff; border-radius: 12px; padding: 10px 12px; border-left: 6px solid #394060; display: flex; flex-direction: column; gap: 2px; }
+.family span { color: #5b5f73; font-size: 0.95rem; }
 
 .piece { text-align: center; }
 .piece .icon { font-size: 4rem; animation: pop 0.6s ease-out; }
