@@ -213,7 +213,7 @@ function roundRect(x, y, w, h, r) {
 
 function drawBackground() {
   const g = ctx.createLinearGradient(0, 0, 0, H)
-  g.addColorStop(0, '#fff4e0')
+  g.addColorStop(0, '#ffffff')
   g.addColorStop(1, '#ffe1ec')
   ctx.fillStyle = g
   ctx.fillRect(0, 0, W, H)
@@ -535,7 +535,7 @@ onUnmounted(() => {
 }
 .bravo {
   padding: 18px 34px;
-  border-radius: 20px;
+  border-radius: 0;
   background: #ffc93f;
   color: #3a3046;
   font-size: 2.2rem;

@@ -12,9 +12,12 @@ function draw() {
   const c = canvas.value
   const ctx = c.getContext('2d')
   const W = c.width, H = c.height
-  ctx.fillStyle = '#fff4e0'
+  const css = getComputedStyle(document.documentElement)
+  const bg = css.getPropertyValue('--accent-50').trim()
+  const ink = css.getPropertyValue('--ink').trim()
+  ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
-  ctx.fillStyle = '#394060'
+  ctx.fillStyle = ink
   ctx.font = 'bold 36px system-ui, sans-serif'
   ctx.textAlign = 'center'
   ctx.fillText(name.value || 'Mon robot', W / 2, 60)
@@ -34,7 +37,7 @@ function draw() {
   ctx.lineWidth = 22
   ctx.beginPath(); ctx.moveTo(cx - 35, 360); ctx.lineTo(cx - 35, 470); ctx.moveTo(cx + 35, 360); ctx.lineTo(cx + 35, 470); ctx.stroke()
   if (has('legs')) {
-    ctx.fillStyle = '#394060'
+    ctx.fillStyle = ink
     ctx.fillRect(cx - 50, 400, 30, 20); ctx.fillRect(cx + 20, 420, 30, 20)
   }
 
@@ -42,7 +45,7 @@ function draw() {
   ctx.strokeStyle = color.value
   ctx.lineWidth = 20
   ctx.beginPath(); ctx.moveTo(cx - 70, 215); ctx.lineTo(cx - 120, 300); ctx.lineTo(cx - 110, 370); ctx.stroke()
-  ctx.strokeStyle = has('arm') ? '#394060' : '#ddd'
+  ctx.strokeStyle = has('arm') ? ink : '#ddd'
   ctx.beginPath(); ctx.moveTo(cx + 70, 215); ctx.lineTo(cx + 130, 280); ctx.lineTo(cx + 170, 220); ctx.stroke()
   if (has('arm')) {
     ctx.fillStyle = '#f2b705'
@@ -54,7 +57,7 @@ function draw() {
     ctx.beginPath(); ctx.moveTo(cx + 160, 200); ctx.lineTo(cx + 190, 180); ctx.lineTo(cx + 200, 200); ctx.closePath(); ctx.fill()
   }
 
-  ctx.fillStyle = '#394060'
+  ctx.fillStyle = ink
   ctx.font = '20px system-ui, sans-serif'
   ctx.fillText(props.pieces.map((p) => p.name).join(' · '), W / 2, 520)
   ctx.fillText(`⭐ ${props.points} points · Permis cartésien, SCARA et 6 axes`, W / 2, 555)
@@ -93,10 +96,11 @@ watch([name, color], draw)
 <style scoped>
 .humanoid { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
 canvas { width: 100%; max-width: 360px; border-radius: 16px; }
-label { font-weight: 600; }
-input { margin-left: 8px; padding: 8px; border-radius: 8px; border: 2px solid #394060; font-size: 1rem; }
+label { font-weight: 600; color: var(--ink); font-size: 0.875rem; }
+input { margin-left: 8px; padding: 10px 12px; border: 1px solid var(--border); color: var(--ink); font: inherit; font-weight: 400; font-size: 1rem; }
+input:focus { border-color: var(--accent); }
 .colors { display: flex; gap: 10px; }
-.colors button { width: 36px; height: 36px; border-radius: 50%; border: 3px solid transparent; padding: 0; }
-.colors button.on { border-color: #394060; }
+.colors button { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--white); outline: 1px solid var(--border); padding: 0; }
+.colors button.on { outline: 3px solid var(--ink); }
 .dl { width: 100%; max-width: 360px; }
 </style>
