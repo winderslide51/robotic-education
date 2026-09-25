@@ -535,12 +535,10 @@ onUnmounted(() => {
 }
 .bravo {
   padding: 18px 34px;
-  border-radius: 0;
   background: #ffc93f;
   color: #3a3046;
   font-size: 2.2rem;
   font-weight: 900;
-  box-shadow: 0 6px 0 #ff9f1c, 0 10px 24px rgba(0, 0, 0, 0.2);
   transform: rotate(-4deg);
 }
 .pop-enter-active {

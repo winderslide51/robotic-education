@@ -746,23 +746,23 @@ onUnmounted(() => {
 <style scoped>
 .pour { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .hint { margin: 0; text-align: center; font-size: 0.85rem; line-height: 1.3; }
-.hint b { display: inline-block; min-width: 1.3em; border-radius: 0; background: var(--ink); color: var(--white); text-align: center; }
+.hint b { display: inline-block; min-width: 1.3em; background: var(--ink); color: var(--white); text-align: center; }
 .stage { position: relative; width: 100%; max-width: 480px; min-height: 170px; display: flex; justify-content: center; }
 canvas { display: block; border-radius: 16px; touch-action: none; }
-.axis-name { position: absolute; top: 6px; left: 8px; margin: 0; padding: 4px 8px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; background: rgba(255, 255, 255, 0.85); color: #5b5f73; pointer-events: none; }
-.axis-name.on { background: #fff4c2; color: #26293b; box-shadow: 0 0 0 2px #f5a800; }
-.glass-level { position: absolute; top: 6px; right: 8px; padding: 4px 8px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; background: #2d8fe0; color: #fff; font-variant-numeric: tabular-nums; pointer-events: none; }
-.msg { position: absolute; left: 8px; right: 8px; bottom: 8px; margin: 0; padding: 6px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.92); font-weight: 700; font-size: 0.9rem; color: #c0392b; text-align: center; pointer-events: none; }
+.axis-name { position: absolute; top: 6px; left: 8px; margin: 0; padding: 4px 8px; font-size: 0.8rem; font-weight: 700; background: rgba(255, 255, 255, 0.85); color: #5b5f73; pointer-events: none; }
+.axis-name.on { background: #fff4c2; color: #26293b; }
+.glass-level { position: absolute; top: 6px; right: 8px; padding: 4px 8px; font-size: 0.8rem; font-weight: 700; background: #2d8fe0; color: #fff; font-variant-numeric: tabular-nums; pointer-events: none; }
+.msg { position: absolute; left: 8px; right: 8px; bottom: 8px; margin: 0; padding: 6px 10px; background: rgba(255, 255, 255, 0.92); font-weight: 700; font-size: 0.9rem; color: #c0392b; text-align: center; pointer-events: none; }
 .msg.ok { color: #1e8449; }
-.overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; padding: 12px; border-radius: 16px; background: rgba(231, 76, 60, 0.2); animation: appear 0.3s ease-out; }
-.bubble { background: #fff; padding: 12px 22px; border-radius: 18px; font-size: 1.5rem; font-weight: 800; color: #d64531; text-align: center; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); }
-.retry { font-size: 1.1875rem; font-weight: 700; padding: 12px 28px; min-height: 48px; border: none; border-radius: 0; background: var(--accent); color: var(--white); }
+.overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; padding: 12px; background: rgba(231, 76, 60, 0.2); animation: appear 0.3s ease-out; }
+.bubble { background: #fff; padding: 12px 22px; font-size: 1.5rem; font-weight: 800; color: #d64531; text-align: center; }
+.retry { font-size: 1.1875rem; font-weight: 700; padding: 12px 28px; min-height: 48px; border: none; background: var(--accent); color: var(--white); }
 .retry:hover { background: var(--accent-strong); }
-.fallback, .loading3d { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 16px; background: #eef1f6; border-radius: 16px; }
+.fallback, .loading3d { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 16px; background: #eef1f6; }
 .fallback p { margin: 4px 0; }
 .axes { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .axes.off { opacity: 0.35; pointer-events: none; }
-.axis { display: flex; flex-direction: column; gap: 0; padding: 2px 6px; border-radius: 10px; min-width: 0; }
+.axis { display: flex; flex-direction: column; gap: 0; padding: 2px 6px; min-width: 0; }
 .axis.on { background: var(--accent-50); box-shadow: inset 0 0 0 1px var(--accent-200); }
 .name { display: flex; align-items: center; gap: 7px; padding: 4px 0 0; font-size: 0.72rem; font-weight: 700; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .name b { flex: none; display: inline-flex; justify-content: center; align-items: center; width: 1.35em; height: 1.35em; border-radius: 50%; background: var(--ink); color: var(--white); font-size: 0.7rem; }
@@ -771,19 +771,19 @@ canvas { display: block; border-radius: 16px; touch-action: none; }
 .tried { position: absolute; top: -4px; right: -7px; display: inline-flex; justify-content: center; align-items: center; width: 1.15em; height: 1.15em; border-radius: 50%; background: #27ae60; color: #fff; font-size: 0.6rem; font-style: normal; box-shadow: 0 0 0 1.5px #fffaf2; }
 input[type='range'] { -webkit-appearance: none; appearance: none; width: 100%; height: 30px; margin: 0; background: transparent; touch-action: none; }
 input[type='range']:disabled { opacity: 0.5; }
-input[type='range']::-webkit-slider-runnable-track { height: 8px; border-radius: 0; background: var(--rail); }
-input[type='range']::-moz-range-track { height: 8px; border-radius: 0; background: var(--rail); }
+input[type='range']::-webkit-slider-runnable-track { height: 8px; background: var(--rail); }
+input[type='range']::-moz-range-track { height: 8px; background: var(--rail); }
 input[type='range']::-moz-range-progress { height: 8px; background: var(--accent); }
 input[type='range']::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 28px; height: 28px; margin-top: -10px; border-radius: 50%; background: var(--accent); border: 3px solid var(--white); box-shadow: 0 0 0 1px var(--accent-strong); }
 input[type='range']::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); border: 3px solid var(--white); box-shadow: 0 0 0 1px var(--accent-strong); }
 .axis.on input[type='range']::-webkit-slider-thumb { background: var(--accent-strong); }
 .axis.on input[type='range']::-moz-range-thumb { background: var(--accent-strong); }
-.win { position: absolute; inset: -4px; z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; padding: 20px; text-align: center; background: #fffaf2; border-radius: 16px; animation: appear 0.35s ease-out; }
+.win { position: absolute; inset: -4px; z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; padding: 20px; text-align: center; background: #fffaf2; animation: appear 0.35s ease-out; }
 .win .trophy { font-size: 3.5rem; }
 .win .big { margin: 0; font-size: 1.8rem; font-weight: 800; line-height: 1.25; }
 .win .lesson { margin: 0; font-size: 1.25rem; font-weight: 700; line-height: 1.35; }
 .win .lesson strong { color: #f28c28; }
-.continue { margin-top: 8px; border: none; border-radius: 0; padding: 12px 40px; min-height: 48px; font-size: 1.1875rem; font-weight: 700; background: var(--accent); color: var(--white); }
+.continue { margin-top: 8px; border: none; padding: 12px 40px; min-height: 48px; font-size: 1.1875rem; font-weight: 700; background: var(--accent); color: var(--white); }
 .continue:hover { background: var(--accent-strong); }
 @keyframes appear { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
 </style>

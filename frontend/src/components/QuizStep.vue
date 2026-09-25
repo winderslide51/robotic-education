@@ -63,7 +63,7 @@ onUnmounted(() => clearInterval(timer))
         v-for="(c, i) in current.choices"
         :key="i"
         class="answer"
-        :class="{ selected: picked === i || (picked !== null && i === current.answer), good: picked !== null && i === current.answer, bad: picked === i && i !== current.answer }"
+        :class="{ selected: picked !== null && i === current.answer, bad: picked === i && i !== current.answer }"
         :disabled="picked !== null"
         @click="choose(i)"
       >
@@ -73,8 +73,8 @@ onUnmounted(() => clearInterval(timer))
         <span v-else-if="picked === i" class="mark">✗<span class="sr"> ta réponse</span></span>
       </button>
     </div>
-    <div v-if="picked !== null" class="feedback">
-      <div class="explain" role="status" aria-live="polite">
+    <div class="live" role="status" aria-live="polite">
+      <div v-if="picked !== null" class="explain">
         <div class="explain-head">
           <span class="letter outline">{{ LETTERS[current.answer] }}</span>
           <b>{{ picked === current.answer ? 'Bien joué !' : picked === -1 ? 'Temps écoulé !' : 'Pas tout à fait…' }}</b>
@@ -84,6 +84,8 @@ onUnmounted(() => clearInterval(timer))
         </p>
         <p>{{ current.explain }}</p>
       </div>
+    </div>
+    <div v-if="picked !== null" class="feedback">
       <button class="next" @click="next">Continuer</button>
     </div>
   </div>
@@ -93,16 +95,12 @@ onUnmounted(() => clearInterval(timer))
 .quiz { display: flex; flex-direction: column; gap: 20px; }
 .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .timer { text-align: center; font-size: 2.25rem; font-weight: 700; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
-.timer.hurry { color: var(--accent-strong); }
+.timer.hurry { color: var(--danger); }
 .timer.over { color: var(--muted); }
 h2 { font-size: 1.375rem; line-height: 1.4; }
 .choices { display: flex; flex-direction: column; gap: 12px; }
 .text { flex: 1; }
-.mark { flex: none; font-weight: 700; color: var(--accent-strong); }
-.answer.bad .mark { color: var(--ink); }
-.answer.bad { border-style: dashed; }
 .answer-text { color: var(--ink); }
 .explain-head b { color: var(--ink); }
-.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .next { width: 100%; }
 </style>

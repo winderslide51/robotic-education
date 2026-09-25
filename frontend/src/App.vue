@@ -129,7 +129,7 @@ function nextScenario() {
     </section>
 
     <section v-else-if="phase === 'block'" class="card" :key="block.id + step">
-      <p class="step-head"><span class="badge-step">Atelier {{ blockIndex + 1 }}</span>{{ block.robot }}</p>
+      <p class="step-head"><span class="badge-step">Atelier {{ blockIndex + 1 }} / 3</span>{{ block.robot }}</p>
 
       <template v-if="step === 'question'">
         <div class="naive">🤔 <b>« {{ block.question }} »</b></div>
@@ -175,14 +175,25 @@ function nextScenario() {
           v-for="b in scenarioOrder"
           :key="b.id"
           class="answer"
-          :class="{ good: scenarioPick && b.id === scenario.answer, selected: scenarioPick && b.id === scenario.answer, dim: scenarioPick && b.id !== scenario.answer }"
+          :class="{
+            selected: scenarioPick && b.id === scenario.answer,
+            bad: scenarioPick === b.id && b.id !== scenario.answer,
+            dim: scenarioPick && b.id !== scenario.answer && b.id !== scenarioPick,
+          }"
+          :disabled="!!scenarioPick"
           @click="pickScenario(b.id)"
-        >{{ ROBOT_NAMES[b.id] }}</button>
+        >
+          {{ ROBOT_NAMES[b.id] }}
+          <span v-if="scenarioPick && b.id === scenario.answer" class="mark">✓<span class="sr"> bonne réponse</span></span>
+          <span v-else-if="scenarioPick === b.id" class="mark">✗<span class="sr"> ton choix</span></span>
+        </button>
+      </div>
+      <div class="live" role="status" aria-live="polite">
+        <div v-if="scenarioPick" class="explain">
+          <p><b>{{ scenarioPick === scenario.answer ? 'Bon choix !' : 'Pas le meilleur choix.' }}</b> {{ scenario.explain }}</p>
+        </div>
       </div>
       <div v-if="scenarioPick" class="feedback">
-        <div class="explain">
-          <p><b class="explain-title">{{ scenarioPick === scenario.answer ? 'Bon choix !' : 'Pas le meilleur choix.' }}</b> {{ scenario.explain }}</p>
-        </div>
         <button @click="nextScenario">Continuer</button>
       </div>
     </section>

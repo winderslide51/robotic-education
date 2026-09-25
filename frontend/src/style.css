@@ -1,4 +1,4 @@
-/* Charte HackRobotique (Figma) : toutes les couleurs de l'interface sont ici. */
+/* Charte HackRobotique (Figma) : couleurs de l'interface HTML ; les scènes 3D gardent leurs couleurs. */
 :root {
   --accent: #ea580c;
   --accent-strong: #c2410c; /* orange plus sombre : petit texte blanc sur orange, ou orange sur blanc (contraste AA) */
@@ -10,7 +10,9 @@
   --ink: #0f172a;
   --text: #475569;
   --muted: #64748b;
-  --dot: #94a3b8;
+  --danger: #b91c1c;
+  --danger-50: #fef2f2;
+  --danger-200: #fca5a5;
   --border: #cbd5e1;
   --border-light: #e2e8f0;
   --surface: #f8fafc;
@@ -57,13 +59,18 @@ button { font: inherit; cursor: pointer; }
   font-size: 1.1875rem; font-weight: 700; line-height: 1.2;
   background: var(--accent); color: var(--white);
 }
-.btn:hover, .card > button:hover, .feedback button:hover, .next:hover, .dl:hover { background: var(--accent-strong); }
+@media (hover: hover) {
+  .btn:hover, .card > button:hover, .feedback button:hover, .next:hover, .dl:hover { background: var(--accent-strong); }
+  .btn-secondary:hover, .card > button.btn-secondary:hover { background: var(--surface); }
+  .answer:not(:disabled):hover { border-color: var(--accent-200); }
+}
+.btn:active, .card > button:active, .feedback button:active, .next:active, .dl:active { background: var(--accent-strong); }
 .btn:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 .btn-secondary, .card > button.btn-secondary {
   background: var(--white); color: var(--text); border: 1px solid var(--border);
   font-size: 0.875rem; font-weight: 600;
 }
-.btn-secondary:hover, .card > button.btn-secondary:hover { background: var(--surface); }
+.btn-secondary:active, .card > button.btn-secondary:active { background: var(--surface); }
 .card > button.skip { align-self: center; }
 
 /* Badge d'étape + libellé gris */
@@ -85,10 +92,20 @@ button { font: inherit; cursor: pointer; }
   background: var(--white); border: 1px solid var(--border); color: var(--text);
   font-size: 0.875rem; font-weight: 400; line-height: 1.55; text-align: left;
 }
-.answer:not(:disabled):hover { border-color: var(--accent-200); }
+.answer:not(:disabled):active { border-color: var(--accent-200); }
 .answer:disabled { cursor: default; }
 .answer.selected { background: var(--accent-50); border-color: var(--accent-200); color: var(--ink); font-weight: 600; }
 .answer.selected .letter { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--white); }
+.answer.bad { background: var(--danger-50); border-color: var(--danger-200); color: var(--ink); font-weight: 600; }
+.answer.bad .letter { background: var(--danger); border-color: var(--danger); color: var(--white); }
+
+.mark { flex: none; font-weight: 700; color: var(--accent-strong); }
+.answer.bad .mark { color: var(--danger); }
+/* Région annoncée toujours présente : vide, elle n'ajoute pas d'espace dans la pile (gap de 20 px) */
+.live:empty { margin-top: -20px; }
+
+/* Texte réservé aux lecteurs d'écran */
+.sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* Encadré d'explication (« Réponse sélectionnée ») */
 .explain { display: flex; flex-direction: column; gap: 12px; padding: 16px 20px 20px; background: var(--accent-50); border: 1px solid var(--accent-200); color: var(--text); font-size: 0.875rem; line-height: 1.6; }
@@ -105,10 +122,11 @@ button { font: inherit; cursor: pointer; }
 .meta { font-size: 0.8125rem; font-weight: 600; color: var(--muted); }
 
 /* Accueil */
-.intro { position: relative; min-height: calc(100dvh - 80px); display: flex; flex-direction: column; justify-content: space-between; gap: 24px; overflow: hidden; margin: 0 -16px; padding: 0 16px; }
+.intro { position: relative; min-height: calc(100vh - 80px); min-height: calc(100dvh - 80px); display: flex; flex-direction: column; justify-content: space-between; gap: 24px; overflow: hidden; margin: 0 -16px; padding: 0 16px; }
 .intro-art {
   position: absolute; z-index: 0; left: 50%; top: 50%; width: 125%; aspect-ratio: 306 / 429;
   transform: translate(-50%, -50%) rotate(-15deg); opacity: 0.4; pointer-events: none;
+  /* L'image contient deux planches côte à côte : 200 % de large n'en montre que la moitié gauche (fond blanc). */
   background: url('/design/robotic-arm-isometric.png') left center / 200% 100% no-repeat;
 }
 .intro-veil { position: absolute; z-index: 0; inset: 0; pointer-events: none; background: radial-gradient(ellipse 60% 38% at 50% 50%, var(--veil) 0%, var(--veil) 45%, rgba(255, 255, 255, 0) 100%); }
@@ -120,8 +138,8 @@ button { font: inherit; cursor: pointer; }
 
 /* Bouton « Commencer → » avec mosaïque de carrés de 15 px aux deux extrémités */
 .btn-start, .card > button.btn-start {
-  position: relative; z-index: 1; width: 100%; height: 60px; padding: 0 72px;
-  font-size: 2rem; font-weight: 700; background: var(--accent); color: var(--white); overflow: hidden;
+  position: relative; z-index: 1; width: 100%; height: 60px; padding: 0 clamp(52px, 18vw, 72px);
+  font-size: clamp(1.25rem, 7vw, 2rem); font-weight: 700; background: var(--accent); color: var(--white); overflow: hidden;
 }
 .btn-start .arrow { font-size: 1.25rem; }
 .btn-start::before, .btn-start::after {
@@ -153,7 +171,7 @@ button { font: inherit; cursor: pointer; }
 
 /* Missions : choix du robot */
 .robots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.robots button { justify-content: center; text-align: center; font-weight: 600; color: var(--ink); min-height: 64px; }
+.robots button { justify-content: center; gap: 6px; padding: 12px 8px; text-align: center; font-weight: 600; color: var(--ink); min-height: 64px; }
 .robots button.dim { color: var(--muted); background: var(--surface); }
 
 .feedback { display: flex; flex-direction: column; gap: 16px; }

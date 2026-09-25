@@ -22,8 +22,8 @@ function onThumbError() {
     <h2>Dans la vraie vie : {{ video.title }}</h2>
     <p class="source">✅ Source : {{ video.source }}</p>
     <div class="frame">
-      <iframe v-if="playing" :src="src" title="Vidéo" allow="autoplay; encrypted-media" allowfullscreen />
-      <button v-else class="facade" aria-label="Lire la vidéo" @click="playing = true">
+      <iframe v-if="playing" :src="src" :title="video.title" allow="autoplay; encrypted-media" allowfullscreen />
+      <button v-else class="facade" :aria-label="`Lire la vidéo : ${video.title}`" @click="playing = true">
         <img :src="thumb" alt="" @error="onThumbError" />
         <span class="play" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
