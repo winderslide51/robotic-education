@@ -8,6 +8,7 @@ import PourGame from './components/games/PourGame.vue'
 import VideoStep from './components/VideoStep.vue'
 import QuizStep from './components/QuizStep.vue'
 import HumanoidStep from './components/HumanoidStep.vue'
+import Robot3D from './components/Robot3D.vue'
 
 const games = { claw: ClawGame, sort: SortGame, pour: PourGame }
 const STEPS = ['question', 'game', 'video', 'piece', 'quiz']
@@ -149,9 +150,13 @@ function nextScenario() {
 
       <template v-else-if="step === 'piece'">
         <div class="piece">
-          <div class="icon">{{ block.piece.icon }}</div>
           <h2>Pièce gagnée : {{ block.piece.name }}</h2>
-          <p>{{ block.piece.desc }}</p>
+          <Robot3D :pieces="[...pieces, block.piece]" :new-slot="block.piece.slot" />
+          <div class="piece-won">
+            <img v-if="block.piece.image" class="piece-thumb" :src="block.piece.image" :alt="block.piece.name" />
+            <div v-else class="icon piece-thumb">{{ block.piece.icon }}</div>
+            <p>{{ block.piece.desc }}</p>
+          </div>
         </div>
         <button @click="nextStep">Ajouter à mon robot</button>
       </template>
@@ -185,7 +190,15 @@ function nextScenario() {
     </section>
 
     <section v-else class="card">
-      <HumanoidStep :pieces="pieces" :points="points" />
+      <HumanoidStep :pieces="pieces" :points="points" :ateliers="content.blocks.map((b) => b.robot)" />
     </section>
   </main>
 </template>
+
+<style scoped>
+.piece-won { display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px; background: var(--accent-50, #FFF7ED); border: 1px solid var(--accent-200, #FDBA74); }
+.piece-won p { margin: 0; color: var(--text, #475569); font-size: 0.95rem; line-height: 1.5; }
+.piece-thumb { flex: none; width: 64px; height: 64px; object-fit: cover; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid var(--border, #CBD5E1); }
+.piece .piece-thumb.icon { font-size: 2.4rem; }
+.piece .robot3d { max-width: 250px; min-height: 180px; }
+</style>
