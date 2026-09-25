@@ -45,6 +45,8 @@ button { font: inherit; cursor: pointer; }
 
 .piece { text-align: center; }
 .piece .icon { font-size: 4rem; animation: pop 0.6s ease-out; }
+.piece .pop { animation: pop 0.6s ease-out; margin-bottom: 4px; }
+.family .photo { margin: 6px 0 4px; }
 @keyframes pop { 0% { transform: scale(0) rotate(-30deg); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
 .robots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }

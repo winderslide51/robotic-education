@@ -8,6 +8,7 @@ import PourGame from './components/games/PourGame.vue'
 import VideoStep from './components/VideoStep.vue'
 import QuizStep from './components/QuizStep.vue'
 import HumanoidStep from './components/HumanoidStep.vue'
+import Photo from './components/Photo.vue'
 
 const games = { claw: ClawGame, sort: SortGame, pour: PourGame }
 const STEPS = ['question', 'game', 'video', 'piece', 'quiz']
@@ -121,6 +122,7 @@ function nextScenario() {
           :style="{ borderLeftColor: content.blocks.find((b) => b.id === f.id)?.color }"
         >
           <b>{{ f.name }}</b>
+          <Photo v-if="f.image" :image="f.image" size="sm" />
           <span>{{ f.text }}</span>
         </div>
       </div>
@@ -131,6 +133,7 @@ function nextScenario() {
       <p class="atelier" :style="{ color: block.color }">Atelier {{ blockIndex + 1 }} / 3 · {{ block.robot }}</p>
 
       <template v-if="step === 'question'">
+        <Photo v-if="block.image" :image="block.image" />
         <div class="naive">🤔 <b>« {{ block.question }} »</b></div>
         <p class="teaser">Teste le robot : tu comprendras en le pilotant.</p>
         <button @click="nextStep">Tester</button>
@@ -149,7 +152,10 @@ function nextScenario() {
 
       <template v-else-if="step === 'piece'">
         <div class="piece">
-          <div class="icon">{{ block.piece.icon }}</div>
+          <Photo v-if="block.piece.image" :image="block.piece.image" class="pop">
+            <span class="icon">{{ block.piece.icon }}</span>
+          </Photo>
+          <div v-else class="icon">{{ block.piece.icon }}</div>
           <h2>Pièce gagnée : {{ block.piece.name }}</h2>
           <p>{{ block.piece.desc }}</p>
         </div>
