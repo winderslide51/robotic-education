@@ -1,56 +1,178 @@
+/* Charte HackRobotique (Figma) : couleurs de l'interface HTML ; les scènes 3D gardent leurs couleurs. */
 :root {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  color: #26293b;
-  background: #fff4e0;
+  --accent: #ea580c;
+  --accent-strong: #c2410c; /* orange plus sombre : petit texte blanc sur orange, ou orange sur blanc (contraste AA) */
+  --accent-50: #fff7ed;
+  --accent-200: #fdba74;
+  --mosaic-1: #e98e5e;
+  --mosaic-2: #f9c4a8;
+  --black: #000000;
+  --ink: #0f172a;
+  --text: #475569;
+  --muted: #64748b;
+  --danger: #b91c1c;
+  --danger-50: #fef2f2;
+  --danger-200: #fca5a5;
+  --border: #cbd5e1;
+  --border-light: #e2e8f0;
+  --surface: #f8fafc;
+  --rail: #d9d9d9;
+  --bg: #ffffff;
+  --white: #ffffff;
+  --veil: rgba(255, 255, 255, 0.92);
+
+  font-family: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  color: var(--text);
+  background: var(--bg);
   -webkit-tap-highlight-color: transparent;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; border-radius: 0; }
 
-body { margin: 0; background: #fff4e0; }
+body { margin: 0; background: var(--bg); }
 
-main { max-width: 520px; margin: 0 auto; padding: 12px 16px 40px; }
+main { max-width: 520px; margin: 0 auto; padding: 16px 16px 40px; }
 
-header { display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
-.logo { font-size: 1.2rem; }
-.score { font-size: 0.95rem; }
+h1, h2, h3 { color: var(--ink); font-weight: 700; }
+h1 { font-size: 2.25rem; line-height: 1.2; margin: 0; }
+h2 { font-size: 1.375rem; line-height: 1.4; margin: 0; }
+p { margin: 0; line-height: 1.55; }
 
-.bar { height: 8px; background: #ffd6e7; border-radius: 999px; margin: 10px 0 16px; overflow: hidden; }
-.bar > div { height: 100%; background: linear-gradient(90deg, #e8467c, #f2b705, #2e86de); transition: width 0.4s; }
+/* Barre de progression fine */
+.progress { height: 8px; background: var(--rail); overflow: hidden; }
+.progress > div { height: 100%; background: var(--accent); transition: width 0.4s; }
 
-.card { background: #fffaf2; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(57, 64, 96, 0.12); display: flex; flex-direction: column; gap: 12px; }
+/* En-tête : marque et score (méta SemiBold 13) */
+header { display: flex; justify-content: space-between; align-items: center; margin: 12px 0 20px; font-size: 0.8125rem; font-weight: 600; color: var(--muted); }
+.logo { color: var(--ink); font-weight: 700; }
+
+.card { display: flex; flex-direction: column; gap: 20px; }
 .center { text-align: center; }
 
-h1 { font-size: 1.6rem; margin: 8px 0; }
-
+/* Boutons */
 button { font: inherit; cursor: pointer; }
-.card > button, .feedback button, .dl, .next {
-  border: none; border-radius: 14px; padding: 14px; font-size: 1.05rem; font-weight: 700;
-  background: #394060; color: #fff; box-shadow: 0 4px 0 #22263a;
+.btn, .card > button, .feedback button, .next, .dl {
+  display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+  border: none; padding: 12px 20px; min-height: 48px;
+  /* Bold ≥ 18,7 px : texte « grand », blanc sur orange lisible (AA) */
+  font-size: 1.1875rem; font-weight: 700; line-height: 1.2;
+  background: var(--accent); color: var(--white);
 }
-.card > button:active { transform: translateY(3px); box-shadow: 0 1px 0 #22263a; }
-.card > button.skip { background: transparent; color: #8a8fa0; box-shadow: none; font-size: 0.85rem; font-weight: 400; padding: 4px; }
+@media (hover: hover) {
+  .btn:hover, .card > button:hover, .feedback button:hover, .next:hover, .dl:hover { background: var(--accent-strong); }
+  .btn-secondary:hover, .card > button.btn-secondary:hover { background: var(--surface); }
+  .answer:not(:disabled):hover { border-color: var(--accent-200); }
+}
+.btn:active, .card > button:active, .feedback button:active, .next:active, .dl:active { background: var(--accent-strong); }
+.btn:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.btn-secondary, .card > button.btn-secondary {
+  background: var(--white); color: var(--text); border: 1px solid var(--border);
+  font-size: 0.875rem; font-weight: 600;
+}
+.btn-secondary:active, .card > button.btn-secondary:active { background: var(--surface); }
+.card > button.skip { align-self: center; }
 
+/* Badge d'étape + libellé gris */
+.step-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0; font-size: 0.8125rem; font-weight: 600; color: var(--muted); }
+.badge-step { display: inline-block; padding: 6px 8px; background: var(--accent-strong); color: var(--white); font-size: 0.6875rem; font-weight: 700; line-height: 1.2; }
+
+/* Pastille de lettre A, B, C (seule forme ronde, avec la carte de question) */
+.letter {
+  flex: none; display: inline-flex; justify-content: center; align-items: center;
+  width: 32px; height: 32px; border-radius: 16px;
+  background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  font-size: 0.8125rem; font-weight: 700;
+}
+.letter.outline { background: var(--white); border-color: var(--accent); color: var(--accent-strong); }
+
+/* Carte de réponse */
+.answer {
+  display: flex; align-items: center; gap: 16px; width: 100%; min-height: 56px; padding: 16px;
+  background: var(--white); border: 1px solid var(--border); color: var(--text);
+  font-size: 0.875rem; font-weight: 400; line-height: 1.55; text-align: left;
+}
+.answer:not(:disabled):active { border-color: var(--accent-200); }
+.answer:disabled { cursor: default; }
+.answer.selected { background: var(--accent-50); border-color: var(--accent-200); color: var(--ink); font-weight: 600; }
+.answer.selected .letter { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--white); }
+.answer.bad { background: var(--danger-50); border-color: var(--danger-200); color: var(--ink); font-weight: 600; }
+.answer.bad .letter { background: var(--danger); border-color: var(--danger); color: var(--white); }
+
+.mark { flex: none; font-weight: 700; color: var(--accent-strong); }
+.answer.bad .mark { color: var(--danger); }
+/* Région annoncée toujours présente : vide, elle n'ajoute pas d'espace dans la pile (gap de 20 px) */
+.live:empty { margin-top: -20px; }
+
+/* Texte réservé aux lecteurs d'écran */
+.sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Encadré d'explication (« Réponse sélectionnée ») */
+.explain { display: flex; flex-direction: column; gap: 12px; padding: 16px 20px 20px; background: var(--accent-50); border: 1px solid var(--accent-200); color: var(--text); font-size: 0.875rem; line-height: 1.6; }
+.explain-head { display: flex; align-items: center; gap: 16px; color: var(--ink); font-weight: 600; }
+.explain b { color: var(--ink); font-weight: 600; }
+
+/* Question / énoncé mis en avant */
+.naive { color: var(--ink); font-size: 1.375rem; font-weight: 700; line-height: 1.4; }
+.naive b { font-weight: 700; }
+.naive.small { font-size: 0.875rem; font-weight: 400; line-height: 1.6; color: var(--text); padding: 16px 20px; background: var(--accent-50); border: 1px solid var(--accent-200); }
+.teaser { color: var(--text); font-size: 0.875rem; }
+
+/* Méta « Question n sur N » */
+.meta { font-size: 0.8125rem; font-weight: 600; color: var(--muted); }
+
+/* Accueil */
+.intro { position: relative; min-height: calc(100vh - 80px); min-height: calc(100dvh - 80px); display: flex; flex-direction: column; justify-content: space-between; gap: 24px; overflow: hidden; margin: 0 -16px; padding: 0 16px; }
+.intro-art {
+  position: absolute; z-index: 0; left: 50%; top: 50%; width: 125%; aspect-ratio: 306 / 429;
+  transform: translate(-50%, -50%) rotate(-15deg); opacity: 0.4; pointer-events: none;
+  /* L'image contient deux planches côte à côte : 200 % de large n'en montre que la moitié gauche (fond blanc). */
+  background: url('/design/robotic-arm-isometric.png') left center / 200% 100% no-repeat;
+}
+.intro-veil { position: absolute; z-index: 0; inset: 0; pointer-events: none; background: radial-gradient(ellipse 60% 38% at 50% 50%, var(--veil) 0%, var(--veil) 45%, rgba(255, 255, 255, 0) 100%); }
+.intro-body { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; text-align: center; }
+.intro h1 { color: var(--black); }
+.intro-body p { color: var(--text); font-size: 0.875rem; }
 .ateliers { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-.ateliers span { color: #fff; font-weight: 700; padding: 6px 12px; border-radius: 999px; }
+.ateliers span { padding: 6px 10px; background: var(--white); border: 1px solid var(--border); color: var(--ink); font-size: 0.8125rem; font-weight: 600; }
 
-.atelier { margin: 0; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; }
-.naive { background: #fff; border-radius: 16px; padding: 16px; font-size: 1.2rem; border-left: 6px solid #f2b705; }
-.naive.small { font-size: 1rem; }
-.teaser { margin: 0; color: #5b5f73; }
+/* Bouton « Commencer → » avec mosaïque de carrés de 15 px aux deux extrémités */
+.btn-start, .card > button.btn-start {
+  position: relative; z-index: 1; width: 100%; height: 60px; padding: 0 clamp(52px, 18vw, 72px);
+  font-size: clamp(1.25rem, 7vw, 2rem); font-weight: 700; background: var(--accent); color: var(--white); overflow: hidden;
+}
+.btn-start .arrow { font-size: 1.25rem; }
+.btn-start::before, .btn-start::after {
+  content: ''; position: absolute; top: 0; width: 60px; height: 60px; pointer-events: none;
+  background:
+    linear-gradient(var(--mosaic-1), var(--mosaic-1)) 0 0 / 15px 15px no-repeat,
+    linear-gradient(var(--mosaic-2), var(--mosaic-2)) 30px 0 / 15px 15px no-repeat,
+    linear-gradient(var(--mosaic-2), var(--mosaic-2)) 0 15px / 15px 15px no-repeat,
+    linear-gradient(var(--mosaic-1), var(--mosaic-1)) 15px 15px / 15px 15px no-repeat,
+    linear-gradient(var(--mosaic-1), var(--mosaic-1)) 0 30px / 15px 15px no-repeat,
+    linear-gradient(var(--mosaic-2), var(--mosaic-2)) 30px 30px / 15px 15px no-repeat,
+    linear-gradient(var(--mosaic-2), var(--mosaic-2)) 15px 45px / 15px 15px no-repeat,
+    linear-gradient(var(--mosaic-1), var(--mosaic-1)) 45px 45px / 15px 15px no-repeat;
+}
+.btn-start::before { left: 0; }
+.btn-start::after { right: 0; transform: scaleX(-1); }
 
-.families { display: flex; flex-direction: column; gap: 8px; }
-.family { background: #fff; border-radius: 12px; padding: 10px 12px; border-left: 6px solid #394060; display: flex; flex-direction: column; gap: 2px; }
-.family span { color: #5b5f73; font-size: 0.95rem; }
+/* Les bases : familles de robots */
+.families { display: flex; flex-direction: column; gap: 12px; }
+.family { display: flex; flex-direction: column; gap: 4px; padding: 16px; background: var(--white); border: 1px solid var(--border); font-size: 0.875rem; line-height: 1.55; }
+.family b { color: var(--ink); font-weight: 600; }
+.family span { color: var(--text); }
 
-.piece { text-align: center; }
+/* Pièce gagnée */
+.piece { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 28px; text-align: center; background: var(--accent-50); border: 1px solid var(--accent-200); }
 .piece .icon { font-size: 4rem; animation: pop 0.6s ease-out; }
+.piece p { font-size: 0.875rem; }
 @keyframes pop { 0% { transform: scale(0) rotate(-30deg); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-.robots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.robots button { border: none; border-radius: 14px; color: #fff; font-weight: 700; min-height: 64px; }
-.robots button.dim { opacity: 0.35; }
-.robots button.good { outline: 4px solid #1e8449; }
+/* Missions : choix du robot */
+.robots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.robots button { justify-content: center; gap: 6px; padding: 12px 8px; text-align: center; font-weight: 600; color: var(--ink); min-height: 64px; }
+.robots button.dim { color: var(--muted); background: var(--surface); }
 
-.feedback { background: #fff; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.feedback { display: flex; flex-direction: column; gap: 16px; }
 .feedback p { margin: 0; }

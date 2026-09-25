@@ -213,7 +213,7 @@ function roundRect(x, y, w, h, r) {
 
 function drawBackground() {
   const g = ctx.createLinearGradient(0, 0, 0, H)
-  g.addColorStop(0, '#fff4e0')
+  g.addColorStop(0, '#ffffff')
   g.addColorStop(1, '#ffe1ec')
   ctx.fillStyle = g
   ctx.fillRect(0, 0, W, H)
@@ -535,12 +535,10 @@ onUnmounted(() => {
 }
 .bravo {
   padding: 18px 34px;
-  border-radius: 20px;
   background: #ffc93f;
   color: #3a3046;
   font-size: 2.2rem;
   font-weight: 900;
-  box-shadow: 0 6px 0 #ff9f1c, 0 10px 24px rgba(0, 0, 0, 0.2);
   transform: rotate(-4deg);
 }
 .pop-enter-active {

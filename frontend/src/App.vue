@@ -92,34 +92,35 @@ function nextScenario() {
 
 <template>
   <main>
+    <div class="progress" role="progressbar" aria-label="Progression" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">
+      <div :style="{ width: progress + '%' }" />
+    </div>
     <header>
       <span class="logo">🤖 Robolution</span>
       <span v-if="phase !== 'intro' && phase !== 'bases'" class="score">⭐ {{ points }} · 🧩 {{ pieces.length }}/3</span>
     </header>
-    <div class="bar"><div :style="{ width: progress + '%' }" /></div>
 
     <p v-if="!content" class="center">Chargement…</p>
 
-    <section v-else-if="phase === 'intro'" class="card center">
-      <h1>Bienvenue dans la halle technique</h1>
-      <p>15 minutes, 3 robots, 3 ateliers.<br />Dans chaque atelier, gagne une vraie pièce de robot pour construire le tien !</p>
-      <div class="ateliers">
-        <span v-for="b in content.blocks" :key="b.id" :style="{ background: b.color }">{{ b.robot }}</span>
+    <section v-else-if="phase === 'intro'" class="card intro">
+      <div class="intro-art" aria-hidden="true" />
+      <div class="intro-veil" aria-hidden="true" />
+      <div class="intro-body">
+        <h1>Bienvenue dans la halle technique</h1>
+        <p>15 minutes, 3 robots, 3 ateliers.<br />Dans chaque atelier, gagne une vraie pièce de robot pour construire le tien !</p>
+        <div class="ateliers">
+          <span v-for="b in content.blocks" :key="b.id">{{ b.robot }}</span>
+        </div>
       </div>
-      <button @click="phase = content.intro ? 'bases' : 'block'">C'est parti !</button>
+      <button class="btn-start" @click="phase = content.intro ? 'bases' : 'block'">Commencer <span class="arrow" aria-hidden="true">→</span></button>
     </section>
 
     <section v-else-if="phase === 'bases'" class="card">
-      <p class="atelier">Avant de commencer</p>
+      <p class="step-head"><span class="badge-step">Avant de commencer</span></p>
       <div class="naive">🤔 <b>{{ content.intro.title }}</b></div>
       <p class="teaser">{{ content.intro.text }}</p>
       <div class="families">
-        <div
-          v-for="f in content.intro.families"
-          :key="f.id"
-          class="family"
-          :style="{ borderLeftColor: content.blocks.find((b) => b.id === f.id)?.color }"
-        >
+        <div v-for="f in content.intro.families" :key="f.id" class="family">
           <b>{{ f.name }}</b>
           <span>{{ f.text }}</span>
         </div>
@@ -128,7 +129,7 @@ function nextScenario() {
     </section>
 
     <section v-else-if="phase === 'block'" class="card" :key="block.id + step">
-      <p class="atelier" :style="{ color: block.color }">Atelier {{ blockIndex + 1 }} / 3 · {{ block.robot }}</p>
+      <p class="step-head"><span class="badge-step">Atelier {{ blockIndex + 1 }} / 3</span>{{ block.robot }}</p>
 
       <template v-if="step === 'question'">
         <div class="naive">🤔 <b>« {{ block.question }} »</b></div>
@@ -138,7 +139,7 @@ function nextScenario() {
 
       <template v-else-if="step === 'game'">
         <component :is="games[block.game]" @win="nextStep" />
-        <button class="skip" @click="nextStep">Passer le jeu</button>
+        <button class="skip btn-secondary" @click="nextStep">Passer le jeu</button>
       </template>
 
       <template v-else-if="step === 'video'">
@@ -162,24 +163,37 @@ function nextScenario() {
     </section>
 
     <section v-else-if="phase === 'review'" class="card">
-      <p class="atelier">Révision éclair : les questions ratées reviennent !</p>
+      <p class="step-head"><span class="badge-step">Révision éclair</span>Les questions ratées reviennent !</p>
       <QuizStep :questions="missed" @done="reviewDone" />
     </section>
 
     <section v-else-if="phase === 'scenarios'" class="card" :key="scenarioIndex">
-      <p class="atelier">Mission {{ scenarioIndex + 1 }} / {{ content.scenarios.length }} · Quel robot choisir ?</p>
+      <p class="step-head"><span class="badge-step">Mission {{ scenarioIndex + 1 }} / {{ content.scenarios.length }}</span>Quel robot choisir ?</p>
       <div class="naive">🏭 {{ scenario.need }}</div>
       <div class="robots">
         <button
           v-for="b in scenarioOrder"
           :key="b.id"
-          :style="{ background: b.color }"
-          :class="{ good: scenarioPick && b.id === scenario.answer, dim: scenarioPick && b.id !== scenario.answer }"
+          class="answer"
+          :class="{
+            selected: scenarioPick && b.id === scenario.answer,
+            bad: scenarioPick === b.id && b.id !== scenario.answer,
+            dim: scenarioPick && b.id !== scenario.answer && b.id !== scenarioPick,
+          }"
+          :disabled="!!scenarioPick"
           @click="pickScenario(b.id)"
-        >{{ ROBOT_NAMES[b.id] }}</button>
+        >
+          {{ ROBOT_NAMES[b.id] }}
+          <span v-if="scenarioPick && b.id === scenario.answer" class="mark">✓<span class="sr"> bonne réponse</span></span>
+          <span v-else-if="scenarioPick === b.id" class="mark">✗<span class="sr"> ton choix</span></span>
+        </button>
+      </div>
+      <div class="live" role="status" aria-live="polite">
+        <div v-if="scenarioPick" class="explain">
+          <p><b>{{ scenarioPick === scenario.answer ? 'Bon choix !' : 'Pas le meilleur choix.' }}</b> {{ scenario.explain }}</p>
+        </div>
       </div>
       <div v-if="scenarioPick" class="feedback">
-        <p><b>{{ scenarioPick === scenario.answer ? 'Bon choix !' : 'Pas le meilleur choix.' }}</b> {{ scenario.explain }}</p>
         <button @click="nextScenario">Continuer</button>
       </div>
     </section>

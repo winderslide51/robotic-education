@@ -4,6 +4,7 @@ import { shuffle } from '../shuffle.js'
 
 const props = defineProps({ questions: Array, seconds: { type: Number, default: 20 } })
 const emit = defineEmits(['done'])
+const LETTERS = 'ABCDEFGH'
 
 const index = ref(0)
 const picked = ref(null)
@@ -51,9 +52,9 @@ onUnmounted(() => clearInterval(timer))
 
 <template>
   <div class="quiz">
-    <div class="top">
-      <span>Question {{ index + 1 }} / {{ questions.length }}</span>
-      <span>⭐ {{ points }}</span>
+    <div class="top meta">
+      <span>Question {{ index + 1 }} sur {{ questions.length }}</span>
+      <span>Score actuel : ⭐ {{ points }}</span>
     </div>
     <div class="timer" :class="{ hurry: left <= 5, over: picked !== null }">⏱ {{ left }} s</div>
     <h2>{{ current.q }}</h2>
@@ -61,37 +62,45 @@ onUnmounted(() => clearInterval(timer))
       <button
         v-for="(c, i) in current.choices"
         :key="i"
-        :class="['c' + (i % 4), { good: picked !== null && i === current.answer, bad: picked === i && i !== current.answer }]"
+        class="answer"
+        :class="{ selected: picked !== null && i === current.answer, bad: picked === i && i !== current.answer }"
         :disabled="picked !== null"
         @click="choose(i)"
-      >{{ c }}</button>
+      >
+        <span class="letter">{{ LETTERS[i] }}</span>
+        <span class="text">{{ c }}</span>
+        <span v-if="picked !== null && i === current.answer" class="mark">✓<span class="sr"> bonne réponse</span></span>
+        <span v-else-if="picked === i" class="mark">✗<span class="sr"> ta réponse</span></span>
+      </button>
     </div>
-    <div v-if="picked !== null && picked !== current.answer" class="banner" role="status" aria-live="polite">
-      <b>{{ picked === -1 ? 'Temps écoulé !' : 'Pas tout à fait…' }}</b>
-      <span>{{ picked === -1 ? 'La bonne réponse était' : 'La bonne réponse' }} : <span class="answer">{{ current.choices[current.answer] }}</span></span>
+    <div class="live" role="status" aria-live="polite">
+      <div v-if="picked !== null" class="explain">
+        <div class="explain-head">
+          <span class="letter outline">{{ LETTERS[current.answer] }}</span>
+          <b>{{ picked === current.answer ? 'Bien joué !' : picked === -1 ? 'Temps écoulé !' : 'Pas tout à fait…' }}</b>
+        </div>
+        <p v-if="picked !== current.answer" class="banner">
+          {{ picked === -1 ? 'La bonne réponse était' : 'La bonne réponse' }} : <b class="answer-text">{{ current.choices[current.answer] }}</b>
+        </p>
+        <p>{{ current.explain }}</p>
+      </div>
     </div>
     <div v-if="picked !== null" class="feedback">
-      <p><b v-if="picked === current.answer">Bien joué ! </b>{{ current.explain }}</p>
       <button class="next" @click="next">Continuer</button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.top { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; }
-.timer { text-align: center; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-top: 4px; font-variant-numeric: tabular-nums; }
-.timer.hurry { color: #c0392b; }
-.timer.over { opacity: 0.4; }
-.banner { margin-top: 12px; background: #394060; color: #fff; border-radius: 12px; padding: 12px; font-size: 1.1rem; font-weight: 600; text-align: center; display: flex; flex-direction: column; gap: 4px; }
-.banner .answer { display: inline-block; background: #1e8449; border-radius: 999px; padding: 2px 12px; font-weight: 800; }
-h2 { font-size: 1.2rem; text-align: center; }
-.choices { display: grid; gap: 8px; }
-.choices button { min-height: 52px; border: none; border-radius: 12px; color: #fff; font-size: 1rem; font-weight: 600; padding: 8px; }
-.c0 { background: #e21b3c; } .c1 { background: #1368ce; } .c2 { background: #d89e00; } .c3 { background: #26890c; }
-.choices button:disabled { opacity: 0.3; }
-.choices button.good { opacity: 1; background: #1e8449; outline: 4px solid #145a32; }
-.choices button.good::before { content: '✔ '; }
-.choices button.bad { opacity: 0.6; outline: 3px solid #333; }
-.feedback { margin-top: 12px; background: #fff; border-radius: 12px; padding: 12px; }
+.quiz { display: flex; flex-direction: column; gap: 20px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.timer { text-align: center; font-size: 2.25rem; font-weight: 700; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.timer.hurry { color: var(--danger); }
+.timer.over { color: var(--muted); }
+h2 { font-size: 1.375rem; line-height: 1.4; }
+.choices { display: flex; flex-direction: column; gap: 12px; }
+.text { flex: 1; }
+.answer-text { color: var(--ink); }
+.explain-head b { color: var(--ink); }
 .next { width: 100%; }
 </style>
