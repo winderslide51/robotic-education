@@ -15,6 +15,7 @@ frontend:
     build:
       commands:
         - export VITE_API_URL=$(node -p "require('../amplify_outputs.json').custom.apiUrl")
+        - npm run check-content
         - npm run build
   artifacts:
     baseDirectory: frontend/dist

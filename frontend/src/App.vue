@@ -121,9 +121,9 @@ function nextScenario() {
           class="family"
           :style="{ borderLeftColor: content.blocks.find((b) => b.id === f.id)?.color }"
         >
-          <b>{{ f.name }}</b>
-          <Photo v-if="f.image" :image="f.image" size="sm" />
-          <span>{{ f.text }}</span>
+          <Photo v-if="f.image" :image="f.image" size="thumb" />
+          <b class="family-name">{{ f.name }}</b>
+          <span class="family-text">{{ f.text }}</span>
         </div>
       </div>
       <button @click="phase = 'block'">Aller à l'atelier 1</button>
@@ -133,7 +133,7 @@ function nextScenario() {
       <p class="atelier" :style="{ color: block.color }">Atelier {{ blockIndex + 1 }} / 3 · {{ block.robot }}</p>
 
       <template v-if="step === 'question'">
-        <Photo v-if="block.image" :image="block.image" />
+        <Photo v-if="block.image" :image="block.image" eager />
         <div class="naive">🤔 <b>« {{ block.question }} »</b></div>
         <p class="teaser">Teste le robot : tu comprendras en le pilotant.</p>
         <button @click="nextStep">Tester</button>
@@ -152,8 +152,8 @@ function nextScenario() {
 
       <template v-else-if="step === 'piece'">
         <div class="piece">
-          <Photo v-if="block.piece.image" :image="block.piece.image" class="pop">
-            <span class="icon">{{ block.piece.icon }}</span>
+          <Photo v-if="block.piece.image" :image="block.piece.image" eager>
+            <div class="icon">{{ block.piece.icon }}</div>
           </Photo>
           <div v-else class="icon">{{ block.piece.icon }}</div>
           <h2>Pièce gagnée : {{ block.piece.name }}</h2>
