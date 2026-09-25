@@ -1,0 +1,14 @@
+{
+  "name": "robotic-education",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@aws-amplify/backend": "^1.25.1",
+    "@aws-amplify/backend-cli": "^1.10.0",
+    "@types/node": "^26.6.2",
+    "aws-cdk-lib": "^2.270.0",
+    "constructs": "^10.8.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

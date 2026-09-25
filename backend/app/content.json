@@ -1,0 +1,184 @@
+{
+  "blocks": [
+    {
+      "id": "cartesien",
+      "robot": "Robot cartésien",
+      "game": "claw",
+      "color": "#e8467c",
+      "question": "C'est quoi un axe ?",
+      "answer": "Un axe, c'est une direction dans laquelle le robot peut bouger. Le robot cartésien en a 3 : gauche-droite (X), avant-arrière (Y), haut-bas (Z). Exactement comme la pince de fête foraine !",
+      "video": {
+        "youtubeId": "p4TjzeKhK3A",
+        "start": 10,
+        "end": 45,
+        "title": "Robot portique de palettisation multi-lignes",
+        "source": "Chaîne officielle d'un intégrateur industriel (Sage Automation)",
+        "fallbackId": "gy9J-W8h2Qw"
+      },
+      "piece": {
+        "name": "Rail linéaire",
+        "icon": "🛤️",
+        "slot": "legs",
+        "desc": "Un rail sur lequel glisse un chariot motorisé. C'est lui qui fait avancer le robot en ligne droite sur un axe."
+      },
+      "quiz": [
+        {
+          "q": "Combien d'axes a la pince de fête foraine ?",
+          "choices": [
+            "1",
+            "2",
+            "3",
+            "6"
+          ],
+          "answer": 2,
+          "explain": "X (gauche-droite), Y (avant-arrière) et Z (haut-bas) : 3 axes, comme un robot cartésien."
+        },
+        {
+          "q": "Un robot cartésien se déplace…",
+          "choices": [
+            "en ligne droite",
+            "en tournant sur lui-même",
+            "en marchant"
+          ],
+          "answer": 0,
+          "explain": "Il glisse sur des rails, uniquement en ligne droite."
+        },
+        {
+          "q": "Où trouve-t-on des robots cartésiens ?",
+          "choices": [
+            "Dans les entrepôts pour déplacer des colis",
+            "Dans l'espace uniquement",
+            "Dans les cuisines des restaurants seulement"
+          ],
+          "answer": 0,
+          "explain": "Ils sont très utilisés pour prendre, déplacer et empiler des objets (palettisation)."
+        }
+      ]
+    },
+    {
+      "id": "scara",
+      "robot": "Robot SCARA",
+      "game": "sort",
+      "color": "#f2b705",
+      "question": "Pourquoi un robot aussi rapide ?",
+      "answer": "Le SCARA est un bras qui tourne à plat, comme ton bras posé sur une table. Il ne soulève presque rien, mais il est ultra rapide : parfait pour trier des bonbons, des chocolats ou des composants électroniques.",
+      "video": {
+        "youtubeId": "-m1oKuFkSTE",
+        "start": 5,
+        "end": 35,
+        "title": "SCARA FANUC SR-3iA : prise et dépose à grande vitesse",
+        "source": "Chaîne officielle d'un fabricant (FANUC)",
+        "fallbackId": "vp1N3desi_g"
+      },
+      "piece": {
+        "name": "Ventouse",
+        "icon": "🪠",
+        "slot": "hand",
+        "desc": "Un préhenseur qui aspire l'air pour coller à l'objet. Pas besoin de le serrer : idéal pour les objets fragiles."
+      },
+      "quiz": [
+        {
+          "q": "Le point fort du SCARA, c'est…",
+          "choices": [
+            "la vitesse",
+            "soulever des voitures",
+            "marcher"
+          ],
+          "answer": 0,
+          "explain": "Il est conçu pour prendre et poser très vite, à l'horizontale."
+        },
+        {
+          "q": "Le bras du SCARA bouge surtout…",
+          "choices": [
+            "à plat, à l'horizontale",
+            "uniquement de haut en bas",
+            "dans toutes les directions"
+          ],
+          "answer": 0,
+          "explain": "Ses articulations tournent autour d'axes verticaux : il balaie un plan horizontal."
+        },
+        {
+          "q": "Pour trier 100 bonbons par minute, tu choisis…",
+          "choices": [
+            "un SCARA",
+            "un robot de soudure géant",
+            "une grue"
+          ],
+          "answer": 0,
+          "explain": "Rapide et précis sur des petits objets : c'est le travail typique d'un SCARA."
+        }
+      ]
+    },
+    {
+      "id": "6axes",
+      "robot": "Robot 6 axes",
+      "game": "pour",
+      "color": "#2e86de",
+      "question": "Pourquoi 6 axes ?",
+      "answer": "Avec 6 axes, le robot peut placer son outil n'importe où ET l'orienter dans n'importe quel sens. Comme ton bras : une épaule, un coude, un poignet. C'est pour ça qu'il peut verser, souder ou peindre.",
+      "video": {
+        "youtubeId": "JR1OkA3fQQQ",
+        "start": 10,
+        "end": 45,
+        "title": "Robot ABB 6 axes qui verse du métal en fonderie",
+        "source": "Chaîne officielle d'un intégrateur industriel (Lincoln Electric Automation)",
+        "fallbackId": "X4QVRYAphYQ"
+      },
+      "piece": {
+        "name": "Poignet motorisé",
+        "icon": "🦾",
+        "slot": "arm",
+        "desc": "Trois petits moteurs qui font tourner l'outil dans tous les sens. C'est ce qui permet d'incliner, de visser ou de verser."
+      },
+      "quiz": [
+        {
+          "q": "Pourquoi le robot cartésien ne peut pas verser la carafe ?",
+          "choices": [
+            "Il ne peut pas incliner son outil",
+            "Il est trop petit",
+            "Il n'aime pas l'eau"
+          ],
+          "answer": 0,
+          "explain": "Il ne bouge qu'en ligne droite. Pour verser, il faut orienter l'outil : c'est le rôle du poignet d'un 6 axes."
+        },
+        {
+          "q": "Le robot 6 axes ressemble le plus à…",
+          "choices": [
+            "un bras humain",
+            "un tapis roulant",
+            "une voiture"
+          ],
+          "answer": 0,
+          "explain": "Épaule, coude, poignet : c'est un bras !"
+        },
+        {
+          "q": "Un robot 6 axes coûte plutôt…",
+          "choices": [
+            "plus cher qu'un cartésien",
+            "moins cher qu'une trottinette",
+            "rien du tout"
+          ],
+          "answer": 0,
+          "explain": "Plus d'axes = plus de moteurs et de réglages. On ne l'utilise que quand l'orientation est nécessaire."
+        }
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "need": "Une usine veut empiler des cartons sur des palettes, toujours à plat.",
+      "answer": "cartesien",
+      "explain": "Déplacements en ligne droite, pas besoin d'orienter : le cartésien est simple et moins cher."
+    },
+    {
+      "need": "Une chocolaterie veut mettre 200 chocolats par minute dans des boîtes.",
+      "answer": "scara",
+      "explain": "Petits objets, très grande cadence, à plat : c'est le terrain du SCARA."
+    },
+    {
+      "need": "Une fonderie veut verser du métal en fusion dans des moules.",
+      "answer": "6axes",
+      "explain": "Il faut incliner la poche de coulée : seul le 6 axes sait orienter son outil."
+    }
+  ]
+}
