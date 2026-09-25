@@ -6,17 +6,46 @@
       {
         "id": "cartesien",
         "name": "Cartésien",
-        "text": "3 axes en ligne droite : gauche-droite, avant-arrière, haut-bas. Simple et précis."
+        "text": "3 axes en ligne droite : gauche-droite, avant-arrière, haut-bas. Simple et précis.",
+        "image": {
+          "src": "/images/cartesien.jpg",
+          "alt": "Un robot cartésien en portique : un chariot glisse sur des rails au-dessus de piles de caisses vertes.",
+          "credit": "Photo : tecnowey.com, CC BY 3.0",
+          "creditUrl": "https://commons.wikimedia.org/wiki/File:Robot_Portico_tecno-840.jpg",
+          "author": "tecnowey.com",
+          "license": "CC BY 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/3.0/deed.fr",
+          "modified": true
+        }
       },
       {
         "id": "scara",
         "name": "SCARA",
-        "text": "Un bras qui tourne à plat, comme ton bras posé sur une table. Très rapide."
+        "text": "Un bras qui tourne à plat, comme ton bras posé sur une table. Très rapide.",
+        "image": {
+          "src": "/images/scara.jpg",
+          "alt": "Image 3D d'un robot SCARA bleu : une colonne et un bras articulé qui tourne à plat.",
+          "credit": "Image : Humanrobo, CC BY-SA 3.0",
+          "creditUrl": "https://commons.wikimedia.org/wiki/File:TI_S404-01.jpg",
+          "author": "Humanrobo",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.fr",
+          "modified": true
+        }
       },
       {
         "id": "6axes",
         "name": "6 axes",
-        "text": "Un bras complet : épaule, coude et poignet. Il peut orienter son outil dans tous les sens."
+        "text": "Un bras complet : épaule, coude et poignet. Il peut orienter son outil dans tous les sens.",
+        "image": {
+          "src": "/images/6axes.jpg",
+          "alt": "Un robot 6 axes Stäubli TX60 jaune, debout comme un bras, dans une mini-usine école.",
+          "credit": "Photo : Benoît Prieur, CC0",
+          "creditUrl": "https://commons.wikimedia.org/wiki/File:Vue_de_la_mini-usine_Indulo_(Villeurbanne)_et_de_St%C3%A4ubli_TX60,_janvier_2024.JPG",
+          "author": "Benoît Prieur",
+          "license": "CC0",
+          "modified": true
+        }
       }
     ]
   },
@@ -26,6 +55,16 @@
       "robot": "Robot cartésien",
       "game": "claw",
       "color": "#e8467c",
+      "image": {
+        "src": "/images/cartesien.jpg",
+        "alt": "Un robot cartésien en portique : un chariot glisse sur des rails au-dessus de piles de caisses vertes.",
+        "credit": "Photo : tecnowey.com, CC BY 3.0",
+        "creditUrl": "https://commons.wikimedia.org/wiki/File:Robot_Portico_tecno-840.jpg",
+        "author": "tecnowey.com",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/deed.fr",
+        "modified": true
+      },
       "question": "Comment un robot peut-il atteindre n'importe quel point d'une boîte ?",
       "answer": "Le robot cartésien se déplace le long de ses 3 axes, en ligne droite : gauche-droite (X), avant-arrière (Y) et haut-bas (Z). En combinant les trois, il peut atteindre n'importe quel point de sa zone de travail, comme une machine à pince.",
       "video": {
@@ -40,7 +79,17 @@
         "name": "Axe linéaire",
         "icon": "📏",
         "slot": "legs",
-        "desc": "Un moteur fait avancer un chariot en ligne droite le long d'un guide. Le robot cartésien en a trois, un par direction."
+        "desc": "Un moteur fait avancer un chariot en ligne droite le long d'un guide. Le robot cartésien en a trois, un par direction.",
+        "image": {
+          "src": "/images/axe-lineaire.jpg",
+          "alt": "Quatre axes linéaires en aluminium de longueurs différentes, chacun avec son chariot.",
+          "credit": "Photo : Rollon91, CC BY-SA 3.0",
+          "creditUrl": "https://commons.wikimedia.org/wiki/File:Uniline.jpg",
+          "author": "Rollon91",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.fr",
+          "modified": true
+        }
       },
       "quiz": [
         {
@@ -81,6 +130,16 @@
       "robot": "Robot SCARA",
       "game": "sort",
       "color": "#f2b705",
+      "image": {
+        "src": "/images/scara.jpg",
+        "alt": "Image 3D d'un robot SCARA bleu : une colonne et un bras articulé qui tourne à plat.",
+        "credit": "Image : Humanrobo, CC BY-SA 3.0",
+        "creditUrl": "https://commons.wikimedia.org/wiki/File:TI_S404-01.jpg",
+        "author": "Humanrobo",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.fr",
+        "modified": true
+      },
       "question": "Pourquoi certains robots vont-ils si vite ?",
       "answer": "Le robot SCARA porte des objets légers, mais il enchaîne les gestes à toute vitesse : il peut prendre et poser plus de 100 objets par minute. Parfait pour trier des fruits, des chocolats ou des composants électroniques.",
       "video": {
@@ -95,7 +154,17 @@
         "name": "Ventouse",
         "icon": "🪠",
         "slot": "hand",
-        "desc": "Elle aspire l'air pour se coller à l'objet et le soulever. Pas besoin de le serrer : c'est idéal pour les objets fragiles ou plats."
+        "desc": "Elle aspire l'air pour se coller à l'objet et le soulever. Pas besoin de le serrer : c'est idéal pour les objets fragiles ou plats.",
+        "image": {
+          "src": "/images/ventouse.jpg",
+          "alt": "Un bras robot soulève un carton grâce à quatre ventouses posées sur le dessus.",
+          "credit": "Photo : Shixart1985, CC BY 2.0",
+          "creditUrl": "https://commons.wikimedia.org/wiki/File:Robotic_arm_at_work_lifting_a_box_during_a_technology_exhibition.jpg",
+          "author": "Shixart1985",
+          "license": "CC BY 2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.0/deed.fr",
+          "modified": true
+        }
       },
       "quiz": [
         {
@@ -135,6 +204,15 @@
       "robot": "Robot 6 axes",
       "game": "pour",
       "color": "#2e86de",
+      "image": {
+        "src": "/images/6axes.jpg",
+        "alt": "Un robot 6 axes Stäubli TX60 jaune, debout comme un bras, dans une mini-usine école.",
+        "credit": "Photo : Benoît Prieur, CC0",
+        "creditUrl": "https://commons.wikimedia.org/wiki/File:Vue_de_la_mini-usine_Indulo_(Villeurbanne)_et_de_St%C3%A4ubli_TX60,_janvier_2024.JPG",
+        "author": "Benoît Prieur",
+        "license": "CC0",
+        "modified": true
+      },
       "question": "Pourquoi un robot aurait-il besoin de 6 axes ?",
       "answer": "Avec 6 axes, le robot peut amener son outil à n'importe quel endroit ET l'orienter dans n'importe quel sens. Comme ton bras : une épaule, un coude, un poignet. C'est pour ça qu'il peut verser, souder ou peindre.",
       "video": {
@@ -149,7 +227,18 @@
         "name": "Poignet 3 axes (axes 4-5-6)",
         "icon": "🦾",
         "slot": "arm",
-        "desc": "Les trois derniers axes du robot, au bout du bras. Ils font tourner et incliner l'outil : c'est grâce à eux qu'il peut verser, visser ou peindre."
+        "desc": "Les trois derniers axes du robot, au bout du bras. Ils font tourner et incliner l'outil : c'est grâce à eux qu'il peut verser, visser ou peindre.",
+        "image": {
+          "src": "/images/poignet.jpg",
+          "alt": "Le poignet d'un robot ABB orange, au bout du bras, qui porte une pince et ses câbles.",
+          "credit": "Photo : © Peter Potrowl, CC BY 2.5",
+          "creditUrl": "https://commons.wikimedia.org/wiki/File:Robot_ABB_1.jpg",
+          "author": "© Peter Potrowl",
+          "authorUrl": "https://sitemai.eu",
+          "license": "CC BY 2.5",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.5/deed.fr",
+          "modified": true
+        }
       },
       "quiz": [
         {
